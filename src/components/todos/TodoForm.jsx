@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TODO_CATEGORY_ICON } from "@/constants/icon";
 
 const TodoForm = ({ todoId, onAdd, onClose }) => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [category, setCategory] = useState("TODO");
-  const [isFormInValid, setFormInValid] = useState(true);
+  const [isFormInValid, setFormInValid] = useState(false);
+  const addBtn = useRef();
 
   const add = () => {
     const todo = {
@@ -14,14 +15,23 @@ const TodoForm = ({ todoId, onAdd, onClose }) => {
       summary: summary,
       category: category,
     };
-
     onAdd(todo);
     onClose();
   };
 
+  useEffect(() => {
+    if (title === "" || summary === "") {
+      setFormInValid(true);
+      addBtn.current.disabled = true;
+    } else {
+      setFormInValid(false);
+      addBtn.current.disabled = false;
+    }
+  }, [title, summary]);
+
   return (
     <>
-      {/* <h3 className="text-3xl text-red-200">{ children }</h3> */}
+      <h3 className="text-3xl text-red-200">New Todo</h3>
       <form className="my-2">
         <div>
           <label className="block mb-2 text-xl text-white" htmlFor="title">
@@ -66,7 +76,12 @@ const TodoForm = ({ todoId, onAdd, onClose }) => {
           <button className="text-xl text-white" type="button" onClick={() => onClose()}>
             Cancel
           </button>
-          <button className="px-6 py-3 text-xl text-red-200" type="button" onClick={add}>
+          <button
+            className="px-6 py-3 text-xl text-red-200"
+            type="button"
+            onClick={add}
+            ref={addBtn}
+          >
             Add
           </button>
         </div>
