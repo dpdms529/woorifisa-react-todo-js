@@ -9,7 +9,21 @@ function App() {
         <header>
           <div className="flex justify-center">
             <a to="/">
-              <h1 className="py-8 text-red-200 max-w-max animate-bounce-slow text-7xl">todos</h1>
+              <h1 className="py-8 text-red-200 max-w-max animate-bounce-slow text-7xl flex">
+                <img
+                  src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Growing%20Heart.png"
+                  alt="Growing Heart"
+                  width="40"
+                  height="40"
+                />
+                todos
+                <img
+                  src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Growing%20Heart.png"
+                  alt="Growing Heart"
+                  width="40"
+                  height="40"
+                />
+              </h1>
             </a>
           </div>
         </header>
