@@ -1,7 +1,7 @@
 import DefaultLayout from "./layouts/DefaultLayout";
 import TodoHeader from "./components/todos/TodoHeader";
 import TodoBody from "./components/todos/TodoBody";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const dummyTodos = [
   {
@@ -26,6 +26,14 @@ const dummyTodos = [
 
 function App() {
   const [todos, setTodos] = useState(dummyTodos);
+  const [category, setCategory] = useState("ALL");
+  const [filteredTodos, setFilteredTodos] = useState(todos);
+
+  useEffect(() => {
+    category === "ALL"
+      ? setFilteredTodos(todos)
+      : setFilteredTodos(todos.filter((todo) => todo.category === category));
+  }, [category, todos]);
 
   const onAdd = ({ title, summary, category }) => {
     const newTodo = {
@@ -82,10 +90,10 @@ function App() {
         </header>
         <section className="max-w-xl m-4 mx-auto">
           <div>
-            <TodoHeader onAdd={onAdd} />
+            <TodoHeader onAdd={onAdd} onFilter={setCategory} />
           </div>
           <div>
-            <TodoBody todos={todos} onUpdate={onUpdate} onDelete={onDelete} />
+            <TodoBody todos={filteredTodos} onUpdate={onUpdate} onDelete={onDelete} />
           </div>
         </section>
       </DefaultLayout>
