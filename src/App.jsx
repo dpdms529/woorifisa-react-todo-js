@@ -52,6 +52,10 @@ function App() {
     setTodos(updateTodos);
   };
 
+  const onDelete = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
   return (
     <>
       <DefaultLayout>
@@ -81,7 +85,7 @@ function App() {
             <TodoHeader onAdd={onAdd} />
           </div>
           <div>
-            <TodoBody todos={todos} onUpdate={onUpdate} />
+            <TodoBody todos={todos} onUpdate={onUpdate} onDelete={onDelete} />
           </div>
         </section>
       </DefaultLayout>

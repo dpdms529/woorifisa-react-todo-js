@@ -5,7 +5,7 @@ import Modal from "@/components/ui/Modal";
 import { TODO_CATEGORY_ICON } from "@/constants/icon";
 import TodoForm from "./TodoForm";
 
-const TodoItem = ({ todo, onUpdate }) => {
+const TodoItem = ({ todo, onUpdate, onDelete }) => {
   const [openModal, open] = useState(false);
   const closeModal = () => open(false);
 
@@ -24,12 +24,12 @@ const TodoItem = ({ todo, onUpdate }) => {
       </div>
       <div className="flex items-center gap-1">
         <IconButton icon={"✏️"} onClick={() => open(true)} />
-        <IconButton textColor="text-red-300" icon={"🗑"} />
+        <IconButton textColor="text-red-300" icon={"🗑"} onClick={() => onDelete(todo.id)} />
       </div>
       {openModal &&
         createPortal(
           <Modal onClose={closeModal}>
-            <TodoForm onUpdate={onUpdate} onClose={closeModal} todo={todo}>
+            <TodoForm onUpdate={onUpdate} onDelete={onDelete} onClose={closeModal} todo={todo}>
               Update Todo
             </TodoForm>
           </Modal>,
