@@ -99,7 +99,7 @@ const TodoForm = ({ onAdd, onUpdate, onClose, children, todo }) => {
             onClick={addOrUpdateTodoHandler}
             ref={addBtn}
           >
-            Add
+            {isNewTodoForm(children) ? "Add" : "Update"}
           </button>
         </div>
       </form>
