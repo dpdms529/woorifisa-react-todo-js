@@ -1,7 +1,19 @@
 import DefaultLayout from "./layouts/DefaultLayout";
 import TodoHeader from "./components/todos/TodoHeader";
 import TodoBody from "./components/todos/TodoBody";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
+import { TodoContext, TodoDispatchContext } from "./context/TodoContext";
+
+const reducer = (todos, actions) => {
+  switch (actions.type) {
+    case "ADD":
+      return [...todos, actions.newTodo];
+    case "UPDATE":
+      return todos.map((todo) => (todo.id === actions.updateTodo.id ? actions.updateTodo : todo));
+    case "DELETE":
+      return todos.filter((todo) => todo.id !== actions.id);
+  }
+};
 
 const dummyTodos = [
   {
@@ -25,7 +37,8 @@ const dummyTodos = [
 ];
 
 function App() {
-  const [todos, setTodos] = useState(dummyTodos);
+  // const [todos, setTodos] = useState(dummyTodos);
+  const [todos, dispatch] = useReducer(reducer, dummyTodos);
   const [category, setCategory] = useState("ALL");
   const [filteredTodos, setFilteredTodos] = useState(todos);
 
@@ -42,8 +55,8 @@ function App() {
       summary,
       category,
     };
-    const newTodos = [...todos, newTodo];
-    setTodos(newTodos);
+
+    dispatch({ type: "ADD", newTodo: newTodo });
   };
 
   const onUpdate = ({ id, title, summary, category }) => {
@@ -54,14 +67,11 @@ function App() {
       category,
     };
 
-    const updateTodos = [...todos];
-    const idx = updateTodos.findIndex((todo) => todo.id === id);
-    updateTodos[idx] = updateTodo;
-    setTodos(updateTodos);
+    dispatch({ type: "UPDATE", updateTodo: updateTodo });
   };
 
   const onDelete = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    dispatch({ type: "DELETE", id: id });
   };
 
   return (
@@ -89,12 +99,14 @@ function App() {
           </div>
         </header>
         <section className="max-w-xl m-4 mx-auto">
-          <div>
-            <TodoHeader onAdd={onAdd} onFilter={setCategory} />
-          </div>
-          <div>
-            <TodoBody todos={filteredTodos} onUpdate={onUpdate} onDelete={onDelete} />
-          </div>
+          <TodoContext.Provider value={{ todos: filteredTodos }}>
+            <TodoDispatchContext.Provider
+              value={{ onAdd, onUpdate, onDelete, onFilter: setCategory }}
+            >
+              <TodoHeader />
+              <TodoBody />
+            </TodoDispatchContext.Provider>
+          </TodoContext.Provider>
         </section>
       </DefaultLayout>
     </>

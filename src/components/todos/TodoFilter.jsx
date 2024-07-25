@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { TODO_CATEGORY_ICON } from "@/constants/icon";
+import { TodoDispatchContext } from "../../context/TodoContext";
 
-const TodoFilter = ({ onFilter }) => {
+const TodoFilter = () => {
+  const { onFilter } = useContext(TodoDispatchContext);
   return (
     <select
       className="p-2 text-gray-100 bg-gray-800 rounded"

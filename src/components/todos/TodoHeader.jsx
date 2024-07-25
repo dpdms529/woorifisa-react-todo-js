@@ -5,7 +5,7 @@ import TodoFilter from "./TodoFilter";
 import TodoForm from "./TodoForm";
 
 // 함수형 컴포넌트
-const TodoHeader = ({ onAdd, onFilter }) => {
+const TodoHeader = () => {
   const [openModal, open] = useState(false);
   const closeModal = () => open(false);
 
@@ -21,13 +21,11 @@ const TodoHeader = ({ onAdd, onFilter }) => {
       {openModal &&
         createPortal(
           <Modal onClose={closeModal}>
-            <TodoForm onAdd={onAdd} onClose={closeModal} todo>
-              New Todo
-            </TodoForm>
+            <TodoForm onClose={closeModal}>New Todo</TodoForm>
           </Modal>,
           document.body
         )}
-      <TodoFilter onFilter={onFilter} />
+      <TodoFilter />
     </div>
   );
 };

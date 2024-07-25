@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import IconButton from "@/components/ui/IconButton";
 import Modal from "@/components/ui/Modal";
 import { TODO_CATEGORY_ICON } from "@/constants/icon";
 import TodoForm from "./TodoForm";
+import { TodoDispatchContext } from "../../context/TodoContext";
 
-const TodoItem = ({ todo, onUpdate, onDelete }) => {
+const TodoItem = ({ todo }) => {
   const [openModal, open] = useState(false);
   const closeModal = () => open(false);
+  const { onDelete } = useContext(TodoDispatchContext);
 
   return (
     <li className="flex gap-4 justify-between my-4 py-4 px-4 border-[1px] bg-gray-700 rounded-md shadow-xl">
@@ -29,7 +31,7 @@ const TodoItem = ({ todo, onUpdate, onDelete }) => {
       {openModal &&
         createPortal(
           <Modal onClose={closeModal}>
-            <TodoForm onUpdate={onUpdate} onDelete={onDelete} onClose={closeModal} todo={todo}>
+            <TodoForm onClose={closeModal} todo={todo}>
               Update Todo
             </TodoForm>
           </Modal>,

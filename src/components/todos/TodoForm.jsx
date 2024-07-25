@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { TODO_CATEGORY_ICON } from "@/constants/icon";
+import { TodoDispatchContext } from "../../context/TodoContext";
 
-const TodoForm = ({ onAdd, onUpdate, onClose, children, todo }) => {
+const TodoForm = ({ onClose, children, todo }) => {
   const isNewTodoForm = (children) => {
     return children.startsWith("New");
   };
@@ -11,6 +12,7 @@ const TodoForm = ({ onAdd, onUpdate, onClose, children, todo }) => {
   const [category, setCategory] = useState(isNewTodoForm(children) ? "TODO" : todo.category);
   const [isFormInValid, setFormInValid] = useState(false);
   const addBtn = useRef();
+  const { onAdd, onUpdate } = useContext(TodoDispatchContext);
 
   const addOrUpdateTodoHandler = () => {
     if (isNewTodoForm(children)) {
