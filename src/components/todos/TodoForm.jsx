@@ -1,21 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
 import { TODO_CATEGORY_ICON } from "@/constants/icon";
 
-const TodoForm = ({ todoId, onAdd, onClose }) => {
-  const [title, setTitle] = useState("");
-  const [summary, setSummary] = useState("");
-  const [category, setCategory] = useState("TODO");
+const TodoForm = ({ onAdd, onUpdate, onClose, children, todo }) => {
+  const isNewTodoForm = (children) => {
+    return children.startsWith("New");
+  };
+
+  const [title, setTitle] = useState(isNewTodoForm(children) ? "" : todo.title);
+  const [summary, setSummary] = useState(isNewTodoForm(children) ? "" : todo.summary);
+  const [category, setCategory] = useState(isNewTodoForm(children) ? "TODO" : todo.category);
   const [isFormInValid, setFormInValid] = useState(false);
   const addBtn = useRef();
 
-  const add = () => {
-    const todo = {
-      id: todoId,
-      title: title,
-      summary: summary,
-      category: category,
-    };
-    onAdd(todo);
+  const addOrUpdateTodoHandler = () => {
+    if (isNewTodoForm(children)) {
+      const newTodo = {
+        title,
+        summary,
+        category,
+      };
+      onAdd(newTodo);
+    } else {
+      const updateTodo = {
+        id: todo.id,
+        title,
+        summary,
+        category,
+      };
+      onUpdate(updateTodo);
+    }
+
     onClose();
   };
 
@@ -31,7 +45,7 @@ const TodoForm = ({ todoId, onAdd, onClose }) => {
 
   return (
     <>
-      <h3 className="text-3xl text-red-200">New Todo</h3>
+      <h3 className="text-3xl text-red-200">{children}</h3>
       <form className="my-2">
         <div>
           <label className="block mb-2 text-xl text-white" htmlFor="title">
@@ -41,6 +55,7 @@ const TodoForm = ({ todoId, onAdd, onClose }) => {
             className="w-full p-2 border-[1px] border-gray-300 bg-gray-200 text-gray-900 rounded"
             type="text"
             id="title"
+            defaultValue={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
@@ -52,6 +67,7 @@ const TodoForm = ({ todoId, onAdd, onClose }) => {
             className="w-full p-2 border-[1px] border-gray-300 bg-gray-200 text-gray-900 rounded"
             id="summary"
             rows="5"
+            defaultValue={summary}
             onChange={(e) => setSummary(e.target.value)}
           />
         </div>
@@ -62,6 +78,7 @@ const TodoForm = ({ todoId, onAdd, onClose }) => {
           <select
             className="w-full p-2 border-[1px] border-gray-300 bg-gray-200 text-gray-900 rounded"
             id="category"
+            defaultValue={category}
             onChange={(e) => {
               setCategory(e.target.value);
             }}
@@ -79,7 +96,7 @@ const TodoForm = ({ todoId, onAdd, onClose }) => {
           <button
             className="px-6 py-3 text-xl text-red-200"
             type="button"
-            onClick={add}
+            onClick={addOrUpdateTodoHandler}
             ref={addBtn}
           >
             Add

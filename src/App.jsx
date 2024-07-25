@@ -27,15 +27,29 @@ const dummyTodos = [
 function App() {
   const [todos, setTodos] = useState(dummyTodos);
 
-  const addTodoHandler = ({ title, summary, category }) => {
+  const onAdd = ({ title, summary, category }) => {
     const newTodo = {
       id: self.crypto.randomUUID(),
-      title: title,
-      summary: summary,
-      category: category,
+      title,
+      summary,
+      category,
     };
     const newTodos = [...todos, newTodo];
     setTodos(newTodos);
+  };
+
+  const onUpdate = ({ id, title, summary, category }) => {
+    const updateTodo = {
+      id,
+      title,
+      summary,
+      category,
+    };
+
+    const updateTodos = [...todos];
+    const idx = updateTodos.findIndex((todo) => todo.id === id);
+    updateTodos[idx] = updateTodo;
+    setTodos(updateTodos);
   };
 
   return (
@@ -64,10 +78,10 @@ function App() {
         </header>
         <section className="max-w-xl m-4 mx-auto">
           <div>
-            <TodoHeader todoId={todos[todos.length - 1].id + 1} onAdd={addTodoHandler} />
+            <TodoHeader onAdd={onAdd} />
           </div>
           <div>
-            <TodoBody todos={todos} />
+            <TodoBody todos={todos} onUpdate={onUpdate} />
           </div>
         </section>
       </DefaultLayout>
